@@ -1,10 +1,12 @@
 # [Exynos8890 Recovery](https://github.com/ananjaser1211/exynos8890-exynos-usbdl-recovery) - Re-flashing SBOOT via exynos-usbdl Mode
- Galaxy S7 / S7 Edge Exynos Bootloader recovery/unbrick through exynos-usbdl
+ Galaxy S7 / S7 Edge Exynos8890 Bootloader recovery/unbrick through exynos-usbdl
 
 ## Description
 - Exynos devices support a flash mode caled "exynos-usbdl" which is triggered when Main Stage (UFS) Boot fails, a common scenario to fall into this mode is a bad bootloader flash (sboot.bin or cm.bin) or UFS Damage. these files will help you Recovery from that mode and "Unbrick" your phone aslong as the UFS Chip is *NOT* actually damaged.
 
 - So basically this post is about Attempting to unbrick bootloader on Galaxy S7 and S7 Edge Exynos8890.
+
+- Only Tested on G930F and G935F - Other variant binaries are not tested
 
 - Also a way to document everything i can find about this mode and the various ways to recover from it.
 
@@ -27,9 +29,10 @@ There are few things to tell if you are in USB-DL. here are my observations . Al
 
 - Luck
 
-## Supported Devies
-- SM-G930F
-- SM-G935F
+## Supported Devies and binary version
+- SM-G930F - G930FXXU8EVH2
+- SM-G935F - G935FXXU8EVH3
+- SM-N935F - N935FXXU8CVG2 [ Un-tested ]
 
 * Other devices can be supported by finding proper offsets, if/when i find information on how to calculate said offsets i will update this
 
@@ -39,8 +42,8 @@ There are few things to tell if you are in USB-DL. here are my observations . Al
 - In this guide, the windows tool will be used, alongside "ImageWriterUSBDriver_1113_00"
 - The Tool is old and drivers originate from [Motorolla-BlankFlash](https://mirrors.lolinet.com/firmware/motorola/troika/blankflash/) which are [mirrored here](https://github.com/ananjaser1211/exynos8890-exynos-usbdl-recovery/releases/tag/usb-dl)
 - `SBOOT.BIN` is made of multiple binaries at different offsets, [split-sboot-8890](https://github.com/frederic/exynos-usbdl/blob/master/scripts/split-sboot-8890.sh) was used to strip them out of the `SBOOT.BIN` binary.
-- Currently only SM-G930F And SM-G935F Binaries / config is uploaded as these are the only two i was able to test myself however it should be possible to split S/L/K Variants and SM-N930F/SM-N935F `S-BOOT.BIN` to use with this guide.
-- **No, Downgrading BOOTLOADER Version likely does not work due to the rollbak bit. the binaries in this post are G930FXXU8ETI2/G935FXXU8ETI2 with Rev 8**
+- Currently only SM-G930F And SM-G935F are tested. it should be possible to split other variant's `S-BOOT.BIN` to use with this guide.
+- **No, Downgrading BOOTLOADER Version likely does not work due to the rollback bit. the binaries in this post are most recent Rev 8 binaries**
 
 ## So how to Recover ?
 - If your phone is actually stuck in USB-DL and has no hardware Fault, Then the recovery is as follows :
@@ -53,13 +56,15 @@ There are few things to tell if you are in USB-DL. here are my observations . Al
 
 4- Lunch `Multidownloader_64bit_1.4.1.exe`
 
-5- Press the 3 Dots and select the appropriate config for your device. **exynos-usbdl_g930f.cfg** or **exynos-usbdl_g935f.cfg**
+5- Press the 3 Dots and select the appropriate config for your device. **exynos-usbdl_g930f.cfg** etc.
 
 6- Plug your device
 
 7- Hold the **POWER** Key and confirm your device is detected by checking Device Manager
 
 8- Your Device should show up in multidownloader
+
+- **Note : Throughout this entire process, the power button MUST BE HELD otherwise you leave usb-dl mode**
 
 ![image](https://user-images.githubusercontent.com/25624482/234083783-86e231b6-8289-4bda-9e5e-8d05d02445f0.png)
 
@@ -69,7 +74,7 @@ There are few things to tell if you are in USB-DL. here are my observations . Al
 
 10- **It will fail the first 2/3 times**, Repeat the process by starting again
 
-- Images on My SM-G935F reference - First two flashes Faild, 3rd one was succesful (Note : It wont show last stage)
+- Images from My SM-G935F for reference - First two flashes Faild, 3rd one was succesful (Note : It wont show last stage) and wont mention **Write failed**
 
 ![image](https://user-images.githubusercontent.com/25624482/234087087-1c88540a-032e-40b1-b6f7-e64f1d436bb4.png)
 
