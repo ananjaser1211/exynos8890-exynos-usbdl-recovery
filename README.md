@@ -10,7 +10,9 @@
 
 - Also a way to document everything i can find about this mode and the various ways to recover from it.
 
-- This is NOT a bulletproof un-bricker, sometimes re-enumurating / re-connecting to the device fails and causes the 4th binary to not be flashed, Trial and error is needed
+- This is NOT a bulletproof un-bricker on Windows, sometimes re-enumurating / re-connecting to the device fails and causes the 4th binary to not be flashed, Trial and error is needed
+
+- **Recommended : A linux computer to run fredric exynos-usbdl flasher instead of MultiDownloader**
 
 ## Requirments to qualify for this Unbrick
 There are few things to tell if you are in USB-DL. here are my observations . All of them need to be met to be able to use this repo :
@@ -27,8 +29,6 @@ There are few things to tell if you are in USB-DL. here are my observations . Al
 
 ![image](https://user-images.githubusercontent.com/25624482/234079282-18fb0dc5-6f18-4e70-a6d0-94411ba36208.png)
 
-- Luck
-
 ## Supported Devies and binary version
 - SM-G930F - G930FXXU8EVH2
 - SM-G935F - G935FXXU8EVH3
@@ -37,15 +37,62 @@ There are few things to tell if you are in USB-DL. here are my observations . Al
 * Other devices can be supported by finding proper offsets, if/when i find information on how to calculate said offsets i will update this
 
 ## Boring Details
-- There exists a tool called "MultiDownloader" which is capable of flashing binaries in usb-dl Mode.
-- The tool only runs on Windows, However there are open source implementations see : [exynos9610-usb-emergency-recovery](https://github.com/astarasikov/exynos9610-usb-emergency-recovery) 
-- In this guide, the windows tool will be used, alongside "ImageWriterUSBDriver_1113_00"
+- on Windows we can use a tool called "MultiDownloader" + "ImageWriterUSBDriver_1113_00" to flash in usbdl mode
+- exynos-usbdl is a tool created by [@frederic](https://github.com/frederic) as part of an s-boot exploit, However we can use it to recovery from usb-dl much more consistently than windows, see [exynos-usbdl](https://github.com/frederic/exynos-usbdl)
 - The Tool is old and drivers originate from [Motorolla-BlankFlash](https://mirrors.lolinet.com/firmware/motorola/troika/blankflash/) which are [mirrored here](https://github.com/ananjaser1211/exynos8890-exynos-usbdl-recovery/releases/tag/usb-dl)
 - `SBOOT.BIN` is made of multiple binaries at different offsets, [split-sboot-8890](https://github.com/frederic/exynos-usbdl/blob/master/scripts/split-sboot-8890.sh) was used to strip them out of the `SBOOT.BIN` binary.
 - Currently only SM-G930F And SM-G935F are tested. it should be possible to split other variant's `S-BOOT.BIN` to use with this guide.
 - **No, Downgrading BOOTLOADER Version likely does not work due to the rollback bit. the binaries in this post are most recent Rev 8 binaries**
 
-## So how to Recover ?
+## Credits and sources
+- [@frederic](https://github.com/frederic) for their exynos-usbdl project and research
+
+- https://fredericb.info/2020/06/exynos-usbdl-unsigned-code-loader-for-exynos-bootrom.html
+
+- https://github.com/frederic/exynos-usbdl
+
+- [@jeykul](https://github.com/JeyKul) for bricking their G930F to test
+
+- https://github.com/astarasikov/exynos9610-usb-emergency-recovery
+
+- https://forum.xda-developers.com/t/guide-repair-hard-bricked-devices-with-deleted-bootloader-sboot.3573865/
+
+## Linux Instructions
+
+- If your phone is actually stuck in USB-DL and has no hardware Fault, Then the recovery is as follows :
+
+1- Download this repo as a [zip](https://github.com/ananjaser1211/exynos8890-exynos-usbdl-recovery/archive/refs/heads/main.zip) or use `git clone https://github.com/ananjaser1211/exynos8890-exynos-usbdl-recovery`
+
+2- Open a linux terminal window in the downloaded folder, or `cd exynos8890-exynos-usbdl-recovery`
+
+3- Plug your device via USB.
+
+4- Execute the recovery script as root `sudo ./exynos-usbdl-recover.sh`
+
+![image](https://user-images.githubusercontent.com/25624482/234318977-40fa020a-8f3c-4740-99a8-5869373c8af5.png)
+
+5- Select your device from the window and hit enter.
+
+6- The script will perform few checks and then Flashing process will start.
+
+![image](https://user-images.githubusercontent.com/25624482/234319135-e28b827c-bf88-4528-80b0-2bf084ab7f5b.png)
+
+7- Once it says `Start Flashing` hold the POWER Key and keep it held.
+
+8- if you get `Error: cannot open device 04e8:1234` that means your device is not in USBL-DL or you did not hold the powerkey long enough.
+
+9- if everything goes well, Your device will reboot into Download Mode once it is successful.
+
+10- you can download your stock firmware from [SamLoader](https://github.com/zacharee/SamloaderKotlin) / [SamFW](samfw.com) and follow various other guides online on how to flash your phone via ODIN Or heimdall
+
+- Reference Video of usb-dl courtusy of [@jeykul](https://github.com/JeyKul)
+
+https://user-images.githubusercontent.com/25624482/234320219-ded8ef1b-2d7e-4fc9-8af6-71f2b8427573.mp4
+
+## Windows Instructions
+
+** Note : Try to use Linux version instead as Multidownloader fails alot at the last step **
+
 - If your phone is actually stuck in USB-DL and has no hardware Fault, Then the recovery is as follows :
 
 1- Download the attached Binaries from [Here](https://github.com/ananjaser1211/exynos8890-exynos-usbdl-recovery/releases/tag/usb-dl) or the source [here](https://mirrors.lolinet.com/firmware/motorola/troika/blankflash/)
@@ -85,12 +132,3 @@ There are few things to tell if you are in USB-DL. here are my observations . Al
 13- After which you can download your stock firmware from [SamLoader](https://github.com/zacharee/SamloaderKotlin) / [SamFW](samfw.com) and follow various other guides online on how to flash your phone via ODIN Or heimdall
 
 - **Note :** Since my S7 was bricked a couple times, on some occaisons i had to take the back cover off and physically disconnect the battery after flashing to reset the board. However holding `Vol DOWN + Power` for 15 seconds should trigger a force reboot
-
-## Credits and sources
-- https://fredericb.info/2020/06/exynos-usbdl-unsigned-code-loader-for-exynos-bootrom.html
-
-- https://github.com/frederic/exynos-usbdl
-
-- https://github.com/astarasikov/exynos9610-usb-emergency-recovery
-
-- https://forum.xda-developers.com/t/guide-repair-hard-bricked-devices-with-deleted-bootloader-sboot.3573865/
