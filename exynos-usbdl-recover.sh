@@ -65,6 +65,11 @@ DEVICE_DIR(){
 		echo " Selected Galaxy Note7 FE - SM-N935F"
 		CR_TARGET=N935F
 	fi
+	if [ "$CR_TARGET" = "4" ]; then
+		echo " "
+		echo " Selected A5 (2016) - SM-A510F"
+		CR_TARGET=A510F
+	fi
 }
 
 FLASH(){
@@ -72,15 +77,14 @@ FLASH(){
 	echo " Start Flashing ..."
 	echo " "
 	echo " Plug your device and HOLD the POWER button "
-	echo " "
-	sleep 5
-
+	echo "Hit enter when your device just connected"
+	read
 	./exynos-usbdl n $CR_TARGET/fwbl1.bin
-	sleep 1
+	sleep 0.1
 	./exynos-usbdl n $CR_TARGET/el3_mon.bin
-	sleep 1
+	sleep 0.1
 	./exynos-usbdl n $CR_TARGET/bl2.bin
-	sleep 1
+	sleep 0.1
 	./exynos-usbdl n $CR_TARGET/bootloader.bin
 }
 
@@ -90,11 +94,12 @@ echo "----------------------------------------------"
 echo "exynos8890-usbdl recovery"
 echo " "
 echo "1) herolte (SM-G930F)" "2) hero2lte (SM-G935F)" 
-echo "3) gracerlte (SM-N935F)" "4) Abort" 
+echo "3) gracerlte (SM-N935F)" "4) a5xelte (SM-A510F)"
+echo "5) Abort" 
 echo  " "
 echo "----------------------------------------------"
-read -p "Please select your device (1-3) > " CR_TARGET
-if [ "$CR_TARGET" = "4" ]; then
+read -p "Please select your device (1-4) > " CR_TARGET
+if [ "$CR_TARGET" = "5" ]; then
 	echo "Exit"
 	exit
 else
