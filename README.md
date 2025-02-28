@@ -1,5 +1,5 @@
 # [Exynos8890 Recovery](https://github.com/ananjaser1211/exynos8890-exynos-usbdl-recovery) - Re-flashing SBOOT via exynos-usbdl Mode
- Galaxy S7 / S7 Edge Exynos8890 Bootloader recovery/unbrick through exynos-usbdl
+ Galaxy S7 / S7 Edge Exynos8890 / A5 2016 Bootloader recovery/unbrick through exynos-usbdl
 
 ## Description
 - Exynos devices support a flash mode caled "exynos-usbdl" which is triggered when Main Stage (UFS) Boot fails, a common scenario to fall into this mode is a bad bootloader flash (sboot.bin or cm.bin) or UFS Damage. these files will help you Recovery from that mode and "Unbrick" your phone aslong as the UFS Chip is *NOT* actually damaged.
@@ -25,11 +25,12 @@ There are few things to tell if you are in USB-DL. here are my observations . Al
 
 - And most importantly **Holding POWER button** Will allow the phone to be detected in Windows Device Manager
 
-- When inspecting devices in Device Manager while the **POWER** Button is held, Exynos8890 will show up in devices.
+- When inspecting devices in Device Manager while the **POWER** Button is held, Exynos8890/Exynos7580 will show up in devices.
 
 ![image](https://user-images.githubusercontent.com/25624482/234079282-18fb0dc5-6f18-4e70-a6d0-94411ba36208.png)
 
 ## Supported Devies and binary version
+- SM-A510F - A510FXXS8CTI7 [ Only tested on Linux ]
 - SM-G930F - G930FXXU8EVH2
 - SM-G935F - G935FXXU8EVH3
 - SM-N935F - N935FXXU8CVG2 [ Un-tested ]
@@ -41,7 +42,7 @@ There are few things to tell if you are in USB-DL. here are my observations . Al
 - exynos-usbdl is a tool created by [@frederic](https://github.com/frederic) as part of an s-boot exploit, However we can use it to recovery from usb-dl much more consistently than windows, see [exynos-usbdl](https://github.com/frederic/exynos-usbdl)
 - The Tool is old and drivers originate from [Motorolla-BlankFlash](https://mirrors.lolinet.com/firmware/motorola/troika/blankflash/) which are [mirrored here](https://github.com/ananjaser1211/exynos8890-exynos-usbdl-recovery/releases/tag/usb-dl)
 - `SBOOT.BIN` is made of multiple binaries at different offsets, [split-sboot-8890](https://github.com/frederic/exynos-usbdl/blob/master/scripts/split-sboot-8890.sh) was used to strip them out of the `SBOOT.BIN` binary.
-- Currently only SM-G930F And SM-G935F are tested. it should be possible to split other variant's `S-BOOT.BIN` to use with this guide.
+- Currently only SM-G930F, SM-G935F and SM-A510F are tested. it should be possible to split other variant's `S-BOOT.BIN` to use with this guide.
 - **No, Downgrading BOOTLOADER Version likely does not work due to the rollback bit. the binaries in this post are most recent Rev 8 binaries**
 
 ## Credits and sources
@@ -73,7 +74,7 @@ There are few things to tell if you are in USB-DL. here are my observations . Al
 
 5- Select your device from the window and hit enter.
 
-6- The script will perform few checks and then Flashing process will start.
+6- The script will perform few checks and then Flashing process will start as soon as you hit enter again. When the power button is held for a long time, the connection resets. Sometimes it helps to look at `dmesg -w` and hit enter just after the `Manufacturer: System MCU` message appears in the terminal.
 
 ![image](https://user-images.githubusercontent.com/25624482/234319135-e28b827c-bf88-4528-80b0-2bf084ab7f5b.png)
 
@@ -81,7 +82,7 @@ There are few things to tell if you are in USB-DL. here are my observations . Al
 
 8- if you get `Error: cannot open device 04e8:1234` that means your device is not in USBL-DL or you did not hold the powerkey long enough.
 
-9- if everything goes well, Your device will reboot into Download Mode once it is successful.
+9- if everything goes well, Your device will reboot into Download Mode once it is successful. You wont have to press any additional buttons.
 
 10- you can download your stock firmware from [SamLoader](https://github.com/zacharee/SamloaderKotlin) / [SamFW](samfw.com) and follow various other guides online on how to flash your phone via ODIN Or heimdall
 
